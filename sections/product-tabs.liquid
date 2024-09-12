@@ -1,0 +1,170 @@
+{% schema %}
+{
+  "name": "Product Tabs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tab_1_title",
+      "label": "Tab 1 Title",
+      "default": "Description"
+    },
+    {
+      "type": "collection",
+      "id": "tab_1_collection",
+      "label": "Tab 1 Collection"
+    },
+    {
+      "type": "text",
+      "id": "tab_2_title",
+      "label": "Tab 2 Title",
+      "default": "Details"
+    },
+    {
+      "type": "collection",
+      "id": "tab_2_collection",
+      "label": "Tab 2 Collection"
+    },
+    {
+      "type": "text",
+      "id": "tab_3_title",
+      "label": "Tab 3 Title",
+      "default": "Reviews"
+    },
+    {
+      "type": "collection",
+      "id": "tab_3_collection",
+      "label": "Tab 3 Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Tabs",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="product-tabs">
+  <ul class="tabs">
+    <li class="tab-link active" data-tab="tab-1">{{ section.settings.tab_1_title }}</li>
+    <li class="tab-link" data-tab="tab-2">{{ section.settings.tab_2_title }}</li>
+    <li class="tab-link" data-tab="tab-3">{{ section.settings.tab_3_title }}</li>
+  </ul>
+
+  <!-- Tab 1 Content -->
+  <div id="tab-1" class="tab-content active">
+    <div class="collection-wrapper">
+      {% if section.settings.tab_1_collection %}
+        {% assign collection = collections[section.settings.tab_1_collection] %}
+        <ul class="collection-list">
+          {% for product in collection.products %}
+            <li class="product-card">
+              <a href="{{ product.url }}" class="product-link">
+                <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" class="product-image">
+                <div class="product-info">
+                  <h3 class="product-title">{{ product.title }}</h3>
+                  <p class="product-price">{{ product.price | money }}</p>
+                </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No collection selected for Tab 1.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tab 2 Content -->
+  <div id="tab-2" class="tab-content">
+    <div class="collection-wrapper">
+      {% if section.settings.tab_2_collection %}
+        {% assign collection = collections[section.settings.tab_2_collection] %}
+        <ul class="collection-list">
+          {% for product in collection.products %}
+            <li class="product-card">
+              <a href="{{ product.url }}" class="product-link">
+                <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" class="product-image">
+                <div class="product-info">
+                  <h3 class="product-title">{{ product.title }}</h3>
+                  <p class="product-price">{{ product.price | money }}</p>
+                </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No collection selected for Tab 2.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Tab 3 Content -->
+  <div id="tab-3" class="tab-content">
+    <div class="collection-wrapper">
+      {% if section.settings.tab_3_collection %}
+        {% assign collection = collections[section.settings.tab_3_collection] %}
+        <ul class="collection-list tab-3-collection-list">
+          {% for product in collection.products %}
+            <li class="product-card">
+              <a href="{{ product.url }}" class="product-link">
+                <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" class="product-image">
+                <div class="product-info">
+                  <h3 class="product-title">{{ product.title }}</h3>
+                  <p class="product-price">{{ product.price | money }}</p>
+                </div>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No collection selected for Tab 3.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+.product-tabs { margin-top: 20px; }
+ul.tabs { list-style: none; display: flex; justify-content: space-around; padding: 0; cursor: pointer; }
+ul.tabs li { padding: 10px 20px; background: #d6d2d2; border-radius: 30px; margin-right: 5px; }
+ul.tabs li.active { background: #d43f5b; color: #fff; }
+.tab-content { display: none; padding: 20px; background: #f9f9f9; }
+.tab-content.active { display: block; }
+.collection-wrapper { padding: 20px; }
+.collection-list { justify-content:center; list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 20px; }
+.collection-list .product-card { width: 100%; max-width: 250px; }
+.product-link { display: block; text-decoration: none; color: inherit; }
+.product-image { width: 100%; height: auto; border-bottom: 1px solid #ddd; }
+.product-info { padding: 10px; }
+.product-title { font-size: 16px; margin: 0; }
+.product-price { color: #d43f5b; font-size: 14px; }
+
+@media (min-width: 600px) {
+  .tab-3-collection-list .product-card { width: 48%; }
+}
+
+@media (min-width: 900px) {
+  .tab-3-collection-list .product-card { width: 23%; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var tabs = document.querySelectorAll('.tab-link');
+  var contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      // Remove active classes
+      tabs.forEach(function (t) { t.classList.remove('active'); });
+      contents.forEach(function (content) { content.classList.remove('active'); });
+
+      // Add active class to the clicked tab and corresponding content
+      tab.classList.add('active');
+      document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+});
+</script>
